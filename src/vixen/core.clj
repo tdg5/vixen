@@ -147,13 +147,14 @@
                                       (:content n)))))
         found))))
 
+(defn path->selector [path]
+  (fn [_ _ vix]
+    [[(node-at vix path) path]]))
+
 (defn- freeze [vix paths]
-  (let [path->selector (fn [path]
-                         (fn [_ _ vix]
-                           [[(node-at vix path) path]]))]
-    (assoc vix
-           :cursor
-           [(apply or-fn (map path->selector paths))])))
+  (assoc vix
+         :cursor
+         [(apply or-fn (map path->selector paths))]))
 
 (defn concrete [vix]
   (if (empty? (:cursor vix))
