@@ -1,4 +1,4 @@
-(defproject vixen "0.1.0-SNAPSHOT"
+(defproject vixen "0.1.1-SNAPSHOT"
   :description "Manipulate DOM"
   :url "http://github.com/zensight/vixen"
   :plugins [[cider/cider-nrepl "0.12.0"]]
