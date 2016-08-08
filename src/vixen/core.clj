@@ -141,12 +141,12 @@
       (if n
         (let [newly (selector n p vix)]
           (recur (if (empty? newly) found (concat found newly))
-                 (if (empty? (:content n)
+                 (if (empty? (:content n))
                              others
                              (concat others
                                      (map-indexed (fn [i child]
                                                     [child (conj p i)])
-                                                  (:content n)))))))
+                                                  (:content n))))))
         found))))
 
 (defn path->selector [path]
