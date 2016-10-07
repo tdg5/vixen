@@ -161,7 +161,16 @@
 (defn concrete [vix]
   (if (empty? (:cursor vix))
     vix
-    (freeze (map second (doit vix)))))
+    (freeze vix (map second (doit vix)))))
+
+(defn split [vix]
+  (if (empty? (:cursor vix))
+    [vix]
+    (->>
+     (doit vix)
+     (map second)
+     (map path->selector)
+     (map #(assoc vix :cursor [%])))))
 
 ;;output
 (defn nodes [vix]

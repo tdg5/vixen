@@ -165,7 +165,6 @@
 
       (is (empty? more)))))
 
-
 (deftest siblings
   (testing "none"
     (let [title (-> (parsed)
@@ -233,4 +232,14 @@
 
 (deftest prepend)
 
+(deftest split
+  (testing "lots"
+    (let [found (v/find (parsed) (v/elem= :p))
+          s (v/split found)]
+
+      (is (= 3 (count s)))
+
+      (let [n (v/nodes (first s))]
+        (is (= 1 (count n)))
+        (is (= :p (:tag (first n))))))))
 ;;(run-tests)
