@@ -206,7 +206,10 @@
 
 (deftest to-html)
 
-(deftest to-text)
+(deftest to-text
+  (testing "whole thing"
+    (is (= (v/to-text (parsed))
+           "Vixens are female foxes All about vixens Vixens are female foxes and also a glam metal band from Minnesota. This should really contain more information about vixens, but I don't know any. but wait there's more  Zounds goats" ))))
 
 (deftest reset)
 
@@ -242,4 +245,5 @@
       (let [n (v/nodes (first s))]
         (is (= 1 (count n)))
         (is (= :p (:tag (first n))))))))
-;;(run-tests)
+
+(run-tests)

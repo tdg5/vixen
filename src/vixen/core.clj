@@ -179,7 +179,16 @@
 (defn paths [vix]
   (map second (doit vix)))
 
-(defn to-text [vix])
+(defn to-text* [{:keys [content] :as n}]
+  (cond (nil? n) ""
+        (string? n) (string/trim n)
+        :else (string/join " " (map to-text* content))))
+
+(defn to-text [vix]
+  (->>
+   (nodes vix)
+   (map to-text*)
+   (string/join " ")))
 
 (defn- escape [s]
   ;;stolen from hiccup
@@ -189,7 +198,6 @@
       (replace ">"  "&gt;")
       (replace "\"" "&quot;")
       (replace "'" "&apos;")))
-
 
 (defn- to-html* [{:keys [tag attrs content] :as n}]
   (cond (nil? n) ""
