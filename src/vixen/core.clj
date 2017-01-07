@@ -6,6 +6,13 @@
             [medley.core :as medley]))
 
 ;;utility
+(defn- break? [node]
+  (#{:br} (:tag node)))
+
+(defn- self-closing? [node]
+  (#{:area :base :br :col :command :embed :hr :img :input :keygen :link :meta :param :source :track :wbr}
+   (:tag node)))
+
 (defn- matches? [known in]
   (boolean
    (cond
@@ -180,9 +187,14 @@
   (map second (doit vix)))
 
 (defn to-text* [{:keys [content] :as n}]
-  (cond (nil? n) ""
+  (cond (nil? n) nil
         (string? n) (string/trim n)
-        :else (string/join " " (map to-text* content))))
+        (nil? content) nil
+        :else (->>
+               content
+               (map to-text*)
+               (clojure.core/remove empty?)
+               (string/join " "))))
 
 (defn to-text [vix]
   (->>
@@ -203,15 +215,16 @@
   (cond (nil? n) ""
         ;;(and (string? n) (string/blank? n)) ""
         (string? n) n
+        (self-closing? n) (str "<" (name tag) "/>")
         :else (str "<"
                    (name tag)
                    (if (empty? attrs)
                      ""
                      (str " " (string/join " " (map (fn [[k v]] (str (name k) "='" (escape (name v)) "'")) attrs))))
                    ">"
-                   (if content
-                     (string/join (map to-html* content))
-                     "")
+                   (if (empty? content)
+                     ""
+                     (string/join (map to-html* content)))
                    "</" (name tag) ">")))
 
 (defn to-html [vix]
