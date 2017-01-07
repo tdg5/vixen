@@ -212,20 +212,24 @@
       (replace "'" "&apos;")))
 
 (defn- to-html* [{:keys [tag attrs content] :as n}]
-  (cond (nil? n) ""
-        ;;(and (string? n) (string/blank? n)) ""
-        (string? n) n
-        (self-closing? n) (str "<" (name tag) "/>")
-        :else (str "<"
-                   (name tag)
-                   (if (empty? attrs)
-                     ""
-                     (str " " (string/join " " (map (fn [[k v]] (str (name k) "='" (escape (name v)) "'")) attrs))))
-                   ">"
-                   (if (empty? content)
-                     ""
-                     (string/join (map to-html* content)))
-                   "</" (name tag) ">")))
+  (let [attrs->string #(if (empty? attrs)
+                         ""
+                         (str " " (string/join " " (map (fn [[k v]] (str (name k) "='" (escape (name v)) "'")) attrs))))]
+    (cond (nil? n) ""
+          ;;(and (string? n) (string/blank? n)) ""
+          (string? n) n
+          (self-closing? n) (str "<"
+                                 (name tag)
+                                 (attrs->string)
+                                 "/>")
+          :else (str "<"
+                     (name tag)
+                     (attrs->string)
+                     ">"
+                     (if (empty? content)
+                       ""
+                       (string/join (map to-html* content)))
+                     "</" (name tag) ">"))))
 
 (defn to-html [vix]
   ;;i wish crouton provided this
