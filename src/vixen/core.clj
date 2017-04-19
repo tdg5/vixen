@@ -108,9 +108,6 @@
 (defn text= [value]
   (bool-check #(matches? value %)))
 
-(defn text= [value]
-  (bool-check #(matches? value %)))
-
 (defn meta= [key value]
   (bool-check #(= (get (meta %) key) value)))
 
