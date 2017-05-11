@@ -183,8 +183,9 @@
 (defn paths [vix]
   (map second (doit vix)))
 
-(defn to-text* [{:keys [content] :as n}]
+(defn to-text* [{:keys [content tag] :as n}]
   (cond (nil? n) nil
+        (= tag :style) nil
         (string? n) (string/trim n)
         (nil? content) nil
         :else (->>
