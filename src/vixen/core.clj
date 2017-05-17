@@ -144,13 +144,14 @@
            [[n p] & others] [[node path]]]
       (if n
         (let [newly (selector n p vix)]
-          (recur (if (empty? newly) found (concat found newly))
+          ;; Prefer `into` over `concat` below to support arbitrary stack depth and result count
+          (recur (if (empty? newly) found (into found newly))
                  (if (empty? (:content n))
                              others
-                             (concat others
-                                     (map-indexed (fn [i child]
-                                                    [child (conj p i)])
-                                                  (:content n))))))
+                             (into (vec others)
+                                   (map-indexed (fn [i child]
+                                                  [child (conj p i)])
+                                                (:content n))))))
         found))))
 
 (defn path->selector [path]
