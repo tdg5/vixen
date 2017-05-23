@@ -48,7 +48,7 @@
 
 (defn and-fn [& fs]
   (fn [node path vix]
-    (let [sets (map #(set (% node path set)) fs)]
+    (let [sets (map #(set (% node path vix)) fs)]
       (apply s/intersection sets))))
 
 (defn expand [selector]
